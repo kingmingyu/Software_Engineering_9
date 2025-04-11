@@ -7,7 +7,7 @@
 ## 팀원
 양준모, 최서윤
 
-## ▪️ 사용 도구  
+## 사용 도구  
 ##### Front-End  
 ![HTML](https://img.shields.io/badge/HTML-E34F26?style=flat&logo=html5&logoColor=white)  ![CSS](https://img.shields.io/badge/CSS-1572B6?style=flat&logo=css3&logoColor=white)  ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black) ![React](https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black)
 ##### Back-End  
@@ -22,5 +22,5 @@
 | Style       | 스타일 변경 (코드 포맷팅, 세미콜론 추가 등. 비즈니스 로직에 영향 없음) |
 | Refactor    | 코드 리팩토링 (기능 변화 없이 구조 개선) |
 
-#### ▪️ 계획
+## 계획
 ![Image](https://github.com/user-attachments/assets/8701338f-5a68-4b56-ac14-ccba40ba1b57)
