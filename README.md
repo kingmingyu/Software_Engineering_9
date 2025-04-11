@@ -23,4 +23,4 @@
 | Refactor    | 코드 리팩토링 (기능 변화 없이 구조 개선) |
 
 #### ▪️ 계획
-![image](attachment:4e04bec7-1342-4dca-a878-a3328c9d173a:image.png)
+![Image](https://github.com/user-attachments/assets/8701338f-5a68-4b56-ac14-ccba40ba1b57)
