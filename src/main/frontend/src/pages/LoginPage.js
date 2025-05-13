@@ -30,7 +30,7 @@ function LoginPage() {
     .then(async (res) => {
       if (res.status === 200) {
         try {
-          const check = await axios.get("/user", { withCredentials: true });
+          const check = await axios.get("/api/main", { withCredentials: true });
           if (check.status === 200) {
             navigate("/main");
           } else {
@@ -42,8 +42,17 @@ function LoginPage() {
       } else {
         alert("로그인 실패!");
       }
+    })
+    .catch((error) => {
+      if (error.response && error.response.status === 401) {
+        alert("아이디 또는 비밀번호가 올바르지 않습니다.");
+      } else {
+        alert("로그인 중 오류가 발생했습니다. 다시 시도해주세요.");
+        console.error(error); // 디버깅용
+      }
     });
   };
+
 
   return (
     <div className="login-container">

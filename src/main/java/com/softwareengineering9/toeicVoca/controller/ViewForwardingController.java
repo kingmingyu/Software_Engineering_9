@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ViewForwardingController {
 
-    @GetMapping({"/", "/login"})
+    @GetMapping({"/", "/login", "signup"})
     public String forwardToIndex() {
         return "forward:/index.html";
     }
