@@ -1,0 +1,190 @@
+
+.logo img {
+    width: 150px;
+    height: auto;
+    display: block;
+    position: absolute;
+    top: 45px;
+    left: 10px;
+}
+
+/* 우측 상단 프로필 및 로그아웃 버튼 */
+.top-right-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.profile-button {
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.logout-button {
+    height: 28px;
+    padding: 4px 8px;
+    background-color: #2c2c2c;
+    color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: 'Arial', sans-serif;
+}
+
+.logout-button:hover {
+    background-color: #1e1e1e;
+}
+
+/* 프로필 메뉴 */
+.profile-menu {
+    position: absolute;
+    top: 60px;
+    right: 16px;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.profile-menu p {
+    margin: 8px 0;
+    cursor: pointer;
+}
+
+/* 검색창 */
+.search-container {
+    margin: 20px auto;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+}
+
+.search-input {
+    width: 300px;
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.search-input:focus {
+    border-color: #007bff;
+}
+
+/* 달력 컨테이너 */
+.calendar-container {
+    margin: 40px auto;
+    background: white;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+}
+
+/* react-calendar 기본 스타일 */
+.react-calendar {
+    border: none;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 12px;
+    background-color: white;
+    width: 100%;
+}
+
+.react-calendar__navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.react-calendar__tile {
+    padding: 10px 6px;
+    font-size: 14px;
+    text-align: center;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border-radius: 6px;
+    font-family: 'Arial', sans-serif;
+
+}
+
+.react-calendar__tile--now {
+    background: #e6f0ff;
+    font-weight: bold;
+}
+
+.react-calendar__tile--active {
+    background: #007bff;
+    color: white;
+}
+
+.react-calendar__tile:hover {
+    background: #f0f0f0;
+}
+
+/* 버튼 컨테이너 */
+.button-container {
+    display: flex;
+    gap: 1rem;
+    margin: 20px 0;
+}
+
+.learn-button, .myVoca-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #1D4F99;
+    color: white;
+    border:none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-family: 'Arial', sans-serif;
+}
+
+/* 버튼 호버 시 색상 변경 */
+.learn-button:hover {
+    background: #0a2c61;
+}
+.myVoca-button:hover {
+    background-color: #0a2c61;
+}
+.calendar-search-container{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.calendar-search-input {
+    width: 300px;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.calendar-search-input:focus {
+    border-color: #007bff;
+}
