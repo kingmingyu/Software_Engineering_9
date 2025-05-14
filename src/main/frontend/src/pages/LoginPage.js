@@ -88,7 +88,9 @@ function LoginPage() {
           {/*로그인 버튼*/}
           <button type="button" className="login-button" onClick={handleLogin}>로그인</button>
 
-          <p className="signup-link">회원가입</p>
+          <p className="signup-link" onClick={() => navigate("/signup")}>
+            회원가입
+          </p>
         </div>
       </div>
     </div>

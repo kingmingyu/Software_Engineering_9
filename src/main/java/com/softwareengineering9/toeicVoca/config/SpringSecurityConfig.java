@@ -98,7 +98,7 @@ public class SpringSecurityConfig {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
                 //로그인 페이지에서 username으로 넘어오는 값 즉, id에 해당하는 값을 받아서
-                Users users = userRepository.findById(username)
+                Users users = userRepository.findByUsername(username)
                         //DB에서 해당 값을 찾는다.
                         .orElseThrow(() -> new UsernameNotFoundException(username + "을 찾을 수 없습니다."));
                 return users;

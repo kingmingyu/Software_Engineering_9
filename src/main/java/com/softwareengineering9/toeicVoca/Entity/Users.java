@@ -1,8 +1,6 @@
 package com.softwareengineering9.toeicVoca.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,14 +18,26 @@ import java.util.Collections;
 @ToString
 @Getter
 public class Users implements UserDetails{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Column
     private String email;
     @Column
     private String name;
-    @Id
-    private String id;
+    @Column
+    private String username;
     @Column
     private String password;
+
+    public Users(String email, String name, String username, String password) {
+        this.email = email;
+        this.name = name;
+        this.username = username;
+        this.password = password;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // 권한이 여러 개일 수 있지만, 지금은 하나만 예시
@@ -36,6 +46,6 @@ public class Users implements UserDetails{
 
     @Override
     public String getUsername() {
-        return id; // 또는 email 등 로그인 기준에 따라 다르게
+        return username; // 또는 email 등 로그인 기준에 따라 다르게
     }
 }

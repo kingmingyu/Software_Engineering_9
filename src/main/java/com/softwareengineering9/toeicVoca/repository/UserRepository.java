@@ -3,6 +3,9 @@ package com.softwareengineering9.toeicVoca.repository;
 import com.softwareengineering9.toeicVoca.Entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<Users, String>{
+import java.util.Optional;
 
+public interface UserRepository extends JpaRepository<Users, Long>{
+
+    Optional<Users> findByUsername(String username);
 }
