@@ -4,6 +4,7 @@ import com.softwareengineering9.toeicVoca.dto.UserForm;
 import com.softwareengineering9.toeicVoca.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,9 +21,10 @@ public class SignupController {
         try {
             userService.signup(dto);
             return ResponseEntity.ok("회원가입 성공");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace(); // 로그 찍기
-            return ResponseEntity.status(500).body("회원가입 실패: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류 발생");
         }
     }
 }

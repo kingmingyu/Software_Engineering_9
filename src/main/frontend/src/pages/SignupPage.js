@@ -10,6 +10,8 @@ function SignupPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
+
 
   const handleSignup = async () => {
     if (!email || !name || !username || !password) {
@@ -28,8 +30,11 @@ function SignupPage() {
         alert("회원가입 실패");
       }
     } catch (err) {
-      alert("회원가입 중 오류 발생");
-      console.error(err);
+      if (err.response?.status === 409) {
+          alert(err.response.data);  // => "이미 존재하는 이메일입니다."
+        } else {
+          alert("회원가입 중 오류가 발생했습니다.");
+        }
     }
   };
 
@@ -75,6 +80,7 @@ function SignupPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+
 
           <button type="button" className="signup-button" onClick={handleSignup}>
             회원가입하기
