@@ -35,7 +35,7 @@ const MainPage = () => {
 
     }, []);
     useEffect(() => {
-        axios.get("/main")
+        axios.get("/api/main", { withCredentials: true })
             .then((res) => setHello(res.data))
             .catch(() => {
                 alert("인증 필요 또는 오류 발생");
