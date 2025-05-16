@@ -26,11 +26,18 @@ const UserEditPage = () => {
     };
 
     const handleSave = () => {
-        axios.put("/api/user", userData, { withCredentials: true })
-            .then(() => alert("정보가 저장되었습니다."))
+        axios.patch("/api/myPage/edit", userData, { withCredentials: true })
+            .then(res => {
+                if (res.data.includes("로그아웃")) {
+                    alert("회원 정보 변경으로 인해 다시 로그인해주세요.");
+                    window.location.href = "/login"; // 로그인 페이지로 이동
+                } else {
+                    alert("수정 완료");
+                }
+            })
             .catch(err => {
-                alert("정보 저장에 실패했습니다.");
                 console.error(err);
+                alert("수정 실패");
             });
     };
 
