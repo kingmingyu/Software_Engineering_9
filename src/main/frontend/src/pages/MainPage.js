@@ -64,11 +64,10 @@ const MainPage = () => {
                 <div className="logo" style={{position: 'absolute', left: `${logoPosition.left}px`, top: `${logoPosition.top}px` }}>
                     <img src={logo} alt="VOCACino logo" />
                 </div>
-                <div
-                    className="top-right-buttons"
-                    style={{position: 'absolute', top: '5px', right: '20px'}}
+                <div className="top-right-buttons"
+                     style={{position: 'absolute', top: '5px', right: '20px'}}
                 >
-                    <button className="profile-button" onClick={handleProfileClick}>
+                    <button className="profile-button" onClick={() => navigate("/myPage")}>
                         <img
                             src={profileImgUrl || "/default-profile.png"}
                             alt="프로필"
