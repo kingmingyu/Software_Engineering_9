@@ -1,0 +1,12 @@
+.logo-wrapper {
+    padding: 8px 20px;
+    background-color: white;
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.logo-image {
+    width: 160px;
+    height: auto;
+    user-select: none;
+}
