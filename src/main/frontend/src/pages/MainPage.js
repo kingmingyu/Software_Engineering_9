@@ -7,12 +7,14 @@ import SearchBar from "../component/SearchBar";
 import CalendarBlock from "../component/CalendarBlock";
 import LearnButton from "../component/LearnButton";
 import "../pages/MainPage.css";
+import { useNavigate } from "react-router-dom";
 
 const MainPage = () => {
     const [hello, setHello] = useState("");
     const [profileImgUrl, setProfileImgUrl] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios
@@ -38,10 +40,7 @@ const MainPage = () => {
             <main className="main-content">
                 <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                 <CalendarBlock selectedDate={selectedDate} onDateChange={setSelectedDate} />
-
-                <LearnButton onClick = {() => {
-                    alert("학습하기");
-                }} />
+                <LearnButton onClick={() => navigate("/select-learning-type")} />
             </main>
         </div>
     );

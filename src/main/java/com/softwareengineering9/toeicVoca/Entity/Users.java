@@ -25,15 +25,18 @@ public class Users implements UserDetails{
     @Column
     private String name;
     @Column(unique = true)
-    private String username;
+    private String username; //id
     @Column
     private String password;
+    @Column
+    private Integer learningDate;
 
-    public Users(String email, String name, String username, String password) {
+    public Users(String email, String name, String username, String password, Integer learningDate) {
         this.email = email;
         this.name = name;
         this.username = username;
         this.password = password;
+        this.learningDate = learningDate;
     }
 
     @Override
@@ -46,4 +49,6 @@ public class Users implements UserDetails{
     public String getUsername() {
         return username; // 또는 email 등 로그인 기준에 따라 다르게
     }
+
+
 }

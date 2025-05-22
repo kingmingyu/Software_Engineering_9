@@ -5,6 +5,10 @@ import MainPage from './pages/MainPage';
 import SignupPage from './pages/SignupPage';
 import MyPage from './pages/MyPage';
 import UserEditPage from './pages/UserEditPage';
+import LearningTypeSelection from './pages/LearningTypeSelection';
+import LearningCardPage from "./pages/LearningCardPage";
+import LearningTablePage from "./pages/LearningTablePage";
+import WordTestPage from "./pages/WordTestPage";
 import axios from 'axios';
 
 axios.defaults.withCredentials = true;
@@ -18,6 +22,10 @@ function App() {
           <Route path="/main" element={<MainPage />} />
           <Route path="/myPage" element={<MyPage />} />
           <Route path="/myPage/edit" element={<UserEditPage />} />
+          <Route path="/select-learning-type" element={<LearningTypeSelection />} />
+          <Route path="/learn/card" element={<LearningCardPage />} />
+          <Route path="/learn/table" element={<LearningTablePage />} />
+          <Route path="/word-test" element={<WordTestPage />} />
           <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>

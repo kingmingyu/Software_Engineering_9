@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 function LoginPage() {
-  const [hello, setHello] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate(); // 추가

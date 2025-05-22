@@ -12,8 +12,9 @@ public class UserForm {
     private String name;
     private String username;
     private String password;
+    private Integer learningDate;
 
     public Users toEntity(){
-        return new Users(email, name, username, password);
+        return new Users(email, name, username, password, 0);
     }
 }

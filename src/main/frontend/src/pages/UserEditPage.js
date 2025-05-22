@@ -3,6 +3,8 @@ import axios from "axios";
 import logo from "../assets/images/logo.png";
 import defaultProfileImg from "../assets/images/Generic avatar.png";
 import "./UserEditPage.css";
+import Header from "../component/Header";
+import Logo from "../component/Logo";
 
 const UserEditPage = () => {
     const [userData, setUserData] = useState({
@@ -10,6 +12,7 @@ const UserEditPage = () => {
         email: "",
         username: ""
     });
+    const [profileImgUrl, setProfileImgUrl] = useState("");
 
     useEffect(() => {
         axios.get("/api/myPage", { withCredentials: true })
@@ -24,6 +27,13 @@ const UserEditPage = () => {
         const { name, value } = e.target;
         setUserData({ ...userData, [name]: value });
     };
+
+    const handleLogout = () => {
+            axios
+                .post("/logout")
+                .then(() => (window.location.href = "/login"))
+                .catch(() => alert("로그아웃 실패"));
+        };
 
     const handleSave = () => {
         axios.patch("/api/myPage/edit", userData, { withCredentials: true })
@@ -43,13 +53,8 @@ const UserEditPage = () => {
 
     return (
         <div className="user-edit-container">
-            <header className="user-edit-header">
-                <img src={logo} alt="logo" className="user-edit-logo" />
-                <div className="user-edit-header-right">
-                    <img src={defaultProfileImg} alt="profile" className="user-edit-profile-img" />
-                    <button className="logout-button">로그아웃</button>
-                </div>
-            </header>
+            <Header profileImgUrl={profileImgUrl} onLogout={handleLogout} />
+            <Logo />
             <main className="user-edit-main">
                 <div className="form-group">
                     <label>이름</label>
