@@ -8,6 +8,7 @@ import CalendarBlock from "../component/CalendarBlock";
 import LearnButton from "../component/LearnButton";
 import "../pages/MainPage.css";
 
+
 const MainPage = () => {
     const [hello, setHello] = useState("");
     const [profileImgUrl, setProfileImgUrl] = useState("");
@@ -36,9 +37,16 @@ const MainPage = () => {
             <Header profileImgUrl={profileImgUrl} onLogout={handleLogout} />
             <Logo />
             <main className="main-content">
-                <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                <CalendarBlock selectedDate={selectedDate} onDateChange={setSelectedDate} />
-
+                <div className="search-button-wrapper">
+                    <div className="search-bar-container">
+                        <SearchBar
+                            searchQuery={searchQuery}
+                            setSearchQuery={setSearchQuery}
+                            onMyVocaClick = {() => ("나만의 단어장")}
+                        />
+                    </div>
+                </div>
+                <CalendarBlock selectedDate = {selectedDate} setSelectedDate={setSelectedDate} />
                 <LearnButton onClick = {() => {
                     alert("학습하기");
                 }} />
