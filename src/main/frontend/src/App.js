@@ -5,6 +5,7 @@ import MainPage from './pages/MainPage';
 import SignupPage from './pages/SignupPage';
 import MyPage from './pages/MyPage';
 import UserEditPage from './pages/UserEditPage';
+import AdminPage from './pages/AdminPage';
 import LearningTypeSelection from './pages/LearningTypeSelection';
 import LearningCardPage from "./pages/LearningCardPage";
 import LearningTablePage from "./pages/LearningTablePage";
@@ -20,6 +21,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/main" element={<MainPage />} />
+          <Route path="/admin" element={<AdminPage />} />
           <Route path="/myPage" element={<MyPage />} />
           <Route path="/myPage/edit" element={<UserEditPage />} />
           <Route path="/select-learning-type" element={<LearningTypeSelection />} />

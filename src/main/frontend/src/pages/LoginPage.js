@@ -29,9 +29,16 @@ function LoginPage() {
     .then(async (res) => {
       if (res.status === 200) {
         try {
+          // 관리자 권한 확인
           const check = await axios.get("/api/main", { withCredentials: true });
           if (check.status === 200) {
+            // 응답 헤더에서 리다이렉트 URL 확인
+            const redirectUrl = res.headers['location'];
+            if (redirectUrl === '/admin') {
+              navigate("/admin");
+            } else {
             navigate("/main");
+            }
           } else {
             alert("인증되지 않은 사용자입니다.");
           }

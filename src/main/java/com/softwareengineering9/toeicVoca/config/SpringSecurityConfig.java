@@ -45,24 +45,13 @@ public class SpringSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-//                    .requestMatchers(HttpMethod.POST,"/auth/login").permitAll()
-//                    .requestMatchers(HttpMethod.POST,"/auth/signup").permitAll()
-                                //위의 방법을 사용하면 무한 페이지 리다이렉트 될 수 있다...?
-                                .requestMatchers("/", "/index.html", "/login", "/signup", "/favicon.ico", "/static/**").permitAll()
-                                .requestMatchers("/login").permitAll()
-                                .requestMatchers("/signup").permitAll()
-//                .requestMatchers("/user").hasRole("USER")
-                                .requestMatchers("/api/main").hasRole("USER")
-                                // 관리자는 사용자 페이지도 접근 가능해야 하기 때문에 hasAnyRole을 통해 여러 권한을 줄 수 있다.
-                                .requestMatchers("/api/admin").hasRole("ADMIN")
-                                //이건 일반적인 경우 사용
-//                .requestMatchers("/admin").access(new WebExpressionAuthorizationManager("hasRole('ADMIN') AND hasAuthority('WRITE')"))
-                                //역할과 권한을 둘 다 조건으로 줘야 할 때
-                                //hasRole과 hasAuthority가 있다.
-                                //여기서는 ROLE를 붙일 필요는 굳이 없다.
-                                //애는 권한 없이도 허용
-                                .anyRequest().authenticated()
-                        //나머지는 인증해
+                        .requestMatchers("/", "/index.html", "/login", "/signup", "/favicon.ico", "/static/**").permitAll()
+                        .requestMatchers("/doLogin").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/signup").permitAll()
+                        .requestMatchers("/main").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/login")
@@ -71,10 +60,23 @@ public class SpringSecurityConfig {
                         .passwordParameter("password")
                         .defaultSuccessUrl("/api/main")
                         .successHandler((request, response, authentication) -> {
-                            response.setStatus(HttpServletResponse.SC_OK);
-                            response.getWriter().write("로그인 성공");
+                            System.out.println("로그인 성공: " + authentication.getName());
+                            System.out.println("권한: " + authentication.getAuthorities());
+
+                            // 관리자 계정 확인
+                            if (authentication.getAuthorities().stream()
+                                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+                                System.out.println("관리자로 리다이렉트");
+                                response.setHeader("location", "/admin");
+                                response.setStatus(HttpServletResponse.SC_OK);
+                            } else {
+                                System.out.println("일반 사용자로 리다이렉트");
+                                response.setHeader("location", "/main");
+                                response.setStatus(HttpServletResponse.SC_OK);
+                            }
                         })
                         .failureHandler((request, response, exception) -> {
+                            System.out.println("로그인 실패: " + exception.getMessage());
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                             response.getWriter().write("로그인 실패");
                         })
@@ -84,9 +86,7 @@ public class SpringSecurityConfig {
                         .alwaysRemember(false)
                         .tokenValiditySeconds(2592000)
                 )
-                //로그인 기억하기 위한 메서드
-//                .userDetailsService(userDetailsService())
-                //-> 안넣어도 아래 Bean으로 등록하면 알아서 적용된다?
+                .userDetailsService(userDetailsService(userRepository))
                 //csrf쪽으로는 builder가 이어지지 않기 때문에 and로 이어준다.
                 .csrf(AbstractHttpConfigurer::disable)
                 .build();
@@ -97,14 +97,30 @@ public class SpringSecurityConfig {
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                //로그인 페이지에서 username으로 넘어오는 값 즉, id에 해당하는 값을 받아서
-                Users users = userRepository.findByUsername(username)
-                        //DB에서 해당 값을 찾는다.
-                        .orElseThrow(() -> new UsernameNotFoundException(username + "을 찾을 수 없습니다."));
-                return users;
+                // 관리자 계정 체크
+                if ("admin".equals(username)) {
+                    System.out.println("관리자 계정 로그인 시도");
+                    Users adminUser = new Users();
+                    adminUser.setUsername("admin");
+                    adminUser.setPassword("admin123");
+                    adminUser.setRole("ADMIN");
+                    return adminUser;
+                }
+
+                //일반 사용자 계정 체크
+                try {
+                    Users users = userRepository.findByUsername(username)
+                            .orElseThrow(() -> new UsernameNotFoundException(username + "을 찾을 수 없습니다."));
+                    System.out.println("일반 사용자 로그인: " + username);
+                    return users;
+                } catch (Exception e) {
+                    System.out.println("사용자 검색 오류: " + e.getMessage());
+                    throw e;
+                }
             }
         };
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
 //        return new BCryptPasswordEncoder(); //실전 사용
