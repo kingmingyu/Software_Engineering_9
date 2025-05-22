@@ -24,3 +24,26 @@
     box-shadow: none;
     margin: 0 auto;
 }
+.search-button-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:12px;
+    margin: 10px 0 20px 0;
+    width: 100%;
+    max-width: 500px;
+}
+.search-button-wrapper{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+.search-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 500px;
+    width: 100%;
+    flex-wrap: nowrap;
+}

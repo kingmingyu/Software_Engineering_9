@@ -1,21 +1,8 @@
-.main-content {
+.calendar-wrapper {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    justify-content: flex-start;
-    padding: 10px 20px 0 20px;
-    margin-top: 10PX;
-}
-
-.calendar-search-input {
-    width: 100%;
-    max-width: 400px;
-    padding: 10px 15px;
-    font-size: 16px;
-    border: 1.5px solid #ccc;
-    border-radius: 6px;
-    margin-bottom: 70px;
-    outline-color: #007bff;
+    padding: 20px;
 }
 
 .calendar-container {
@@ -30,6 +17,7 @@
     background-color: white;
     font-family: Arial, sans-serif;
 }
+
 .react-calendar__tile {
     padding: 10px 6px;
     font-size: 14px;
@@ -41,8 +29,11 @@
     transition: background-color 0.2s;
     border-radius: 6px;
     font-family: 'Arial', sans-serif;
+    position: relative;
+    z-index: 1;
 
 }
+
 .react-calendar__tile--now {
     background: #e6f0ff;
     font-weight: bold;
@@ -53,12 +44,45 @@
     color: white;
 }
 
-
 .react-calendar__tile:hover {
     background: #f0f0f0;
 }
 
-.calendar-wrapper {
+.react-calendar__tile.has-piece {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+}
+
+.puzzle-piece {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-color: unset;
+    background-position: unset;
+    background-size: cover;
+    z-index: 0;
+    border-radius: 6px;
+    pointer-events: none;
+}
+.main-content{
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
+    padding: 10px 20px 0 20px;
+    margin-top: 10px;
+}
+.calendar-search-input{
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 70px;
+    outline-color: #007bff;
 }
