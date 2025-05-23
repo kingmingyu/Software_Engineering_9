@@ -12,10 +12,44 @@ function SignupPage() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
 
+  // 유효성 검사 함수들
+  const validateEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return emailRegex.test(email);
+  };
+
+  const validateUsername = (username) => {
+    const usernameRegex = /^[a-zA-Z0-9]{8,16}$/;
+    return usernameRegex.test(username);
+  };
+
+  const validatePassword = (password) => {
+    const passwordRegex = /^[a-zA-Z0-9]{8,16}$/;
+    return passwordRegex.test(password);
+  };
 
   const handleSignup = async () => {
+    // 입력값 유효성 검사
     if (!email || !name || !username || !password) {
       alert("모든 정보를 입력해주세요.");
+      return;
+    }
+
+    // 이메일 형식 검사
+    if (!validateEmail(email)) {
+      alert("올바른 이메일 형식이 아닙니다.");
+      return;
+    }
+
+    // 아이디 형식 검사
+    if (!validateUsername(username)) {
+      alert("아이디는 영문, 숫자 8~16자리로 입력해주세요.");
+      return;
+    }
+
+    // 비밀번호 형식 검사
+    if (!validatePassword(password)) {
+      alert("비밀번호는 영문, 숫자 8~16자리로 입력해주세요.");
       return;
     }
 
@@ -80,7 +114,6 @@ function SignupPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-
 
           <button type="button" className="signup-button" onClick={handleSignup}>
             회원가입하기
