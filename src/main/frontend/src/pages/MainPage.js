@@ -38,7 +38,11 @@ const MainPage = () => {
             <Header profileImgUrl={profileImgUrl} onLogout={handleLogout} />
             <Logo />
             <main className="main-content">
-                <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                <SearchBar
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  onMyVocaClick={() => navigate("/my-voca/card")} // 원하는 경로로 이동
+                />
                 <CalendarBlock selectedDate={selectedDate} onDateChange={setSelectedDate} />
                 <LearnButton onClick={() => navigate("/select-learning-type")} />
             </main>

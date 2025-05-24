@@ -10,7 +10,10 @@ import LearningTypeSelection from './pages/LearningTypeSelection';
 import LearningCardPage from "./pages/LearningCardPage";
 import LearningTablePage from "./pages/LearningTablePage";
 import WordTestPage from "./pages/WordTestPage";
+import LearningCardPageUserVoca from "./pages/LearningCardPageUserVoca";
+import LearningTablePageUserVoca from "./pages/LearningTablePageUserVoca";
 import axios from 'axios';
+
 
 axios.defaults.withCredentials = true;
 
@@ -28,6 +31,8 @@ function App() {
           <Route path="/learn/card" element={<LearningCardPage />} />
           <Route path="/learn/table" element={<LearningTablePage />} />
           <Route path="/word-test" element={<WordTestPage />} />
+          <Route path="/my-voca/card" element={<LearningCardPageUserVoca />} />
+          <Route path="/my-voca/table" element={<LearningTablePageUserVoca />} />
           <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
