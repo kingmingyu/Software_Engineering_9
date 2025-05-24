@@ -39,4 +39,16 @@ public class UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없음"));
         return user; // CustomUserDetails 말고 Users 엔티티 자체를 리턴
     }
+
+    public String findUsernameByNameAndEmail(String name, String email) {
+        return userRepository.findByNameAndEmail(name, email)
+                .map(Users::getUsername)
+                .orElse(null);
+    }
+
+    public String findPasswordByNameAndUsername(String name, String username) {
+        return userRepository.findByNameAndUsername(name, username)
+                .map(Users::getPassword)
+                .orElse(null);
+    }
 }
