@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './AdminPage.css';
+
 import Header from '../component/Header';
 import Logo from '../component/Logo'
+
 
 function AdminPage() {
     const [vocaList, setVocaList] = useState([]);
@@ -77,9 +79,16 @@ function AdminPage() {
 
     return (
         <div className="admin-container">
+
             <Header />
                 <Logo />
                 <h1>VOCAcino 관리자 페이지</h1>
+
+            <header className="admin-header">
+                <h1>VOCAcino 관리자 페이지</h1>
+                <div className="admin-logo" />
+            </header>
+
 
             <div className="admin-content">
                 <div className="add-voca-section">

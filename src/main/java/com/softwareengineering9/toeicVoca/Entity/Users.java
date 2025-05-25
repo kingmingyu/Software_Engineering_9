@@ -25,25 +25,34 @@ public class Users implements UserDetails{
     @Column
     private String name;
     @Column(unique = true)
-    private String username;
+    private String username; //id
     @Column
     private String password;
+    @Column
+    private String role = "USER"; // 기본값을 USER로 설정
+    @Column
+    private Integer learningDate;
 
-    public Users(String email, String name, String username, String password) {
+    public Users(String email, String name, String username, String password, Integer learningDate) {
         this.email = email;
         this.name = name;
         this.username = username;
         this.password = password;
+        this.learningDate = learningDate;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // 권한이 여러 개일 수 있지만, 지금은 하나만 예시
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+        System.out.println("권한 요청: 사용자=" + this.getUsername() + ", 역할=" + this.role);
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + this.role);
+        System.out.println("부여된 권한: " + authority.getAuthority());
+        return Collections.singletonList(authority);
     }
 
     @Override
     public String getUsername() {
         return username; // 또는 email 등 로그인 기준에 따라 다르게
     }
+
+
 }

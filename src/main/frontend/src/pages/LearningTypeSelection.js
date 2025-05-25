@@ -1,10 +1,15 @@
 // src/pages/LearningTypeSelection.js
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+
+import React from "react";
+
 import "./LearningTypeSelection.css";
 import Header from "../component/Header";
 import Logo from "../component/Logo";
 import { useNavigate } from "react-router-dom";
+
 import defaultProfileImg from "../assets/images/Generic avatar.png";
 
 const LearningTypeSelection = () => {
@@ -79,6 +84,13 @@ const LearningTypeSelection = () => {
                 onImageError={handleImageError} // Header에 전달
             />
             <Logo />
+
+const LearningTypeSelection = ({ onLearn, onTest, profileImgUrl, onLogout }) => {
+    const navigate = useNavigate();
+
+    return (
+        <div className="learning-selection-container">
+
             <main className="selection-main">
                 <div className="selection-box">
                     <button
@@ -99,7 +111,11 @@ const LearningTypeSelection = () => {
     );
 };
 
+
 export default LearningTypeSelection;
 
 
+
+
+export default LearningTypeSelection;
 

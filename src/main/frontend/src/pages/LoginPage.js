@@ -42,7 +42,9 @@ function LoginPage() {
           const check = await axios.get("/api/main", { withCredentials: true });
           if (check.status === 200) {
             // 응답 헤더에서 리다이렉트 URL 확인
+
             localStorage.setItem("currentUser", JSON.stringify(check.data));
+
 
             const redirectUrl = res.headers['location'];
             if (redirectUrl === '/admin') {

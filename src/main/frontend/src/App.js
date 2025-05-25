@@ -5,7 +5,15 @@ import MainPage from './pages/MainPage';
 import SignupPage from './pages/SignupPage';
 import MyPage from './pages/MyPage';
 import UserEditPage from './pages/UserEditPage';
+import AdminPage from './pages/AdminPage';
+import LearningTypeSelection from './pages/LearningTypeSelection';
+import LearningCardPage from "./pages/LearningCardPage";
+import LearningTablePage from "./pages/LearningTablePage";
+import WordTestPage from "./pages/WordTestPage";
+import LearningCardPageUserVoca from "./pages/LearningCardPageUserVoca";
+import LearningTablePageUserVoca from "./pages/LearningTablePageUserVoca";
 import axios from 'axios';
+
 
 axios.defaults.withCredentials = true;
 
@@ -16,8 +24,15 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/main" element={<MainPage />} />
+          <Route path="/admin" element={<AdminPage />} />
           <Route path="/myPage" element={<MyPage />} />
           <Route path="/myPage/edit" element={<UserEditPage />} />
+          <Route path="/select-learning-type" element={<LearningTypeSelection />} />
+          <Route path="/learn/card" element={<LearningCardPage />} />
+          <Route path="/learn/table" element={<LearningTablePage />} />
+          <Route path="/word-test" element={<WordTestPage />} />
+          <Route path="/my-voca/card" element={<LearningCardPageUserVoca />} />
+          <Route path="/my-voca/table" element={<LearningTablePageUserVoca />} />
           <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>

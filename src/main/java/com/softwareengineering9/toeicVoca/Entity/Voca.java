@@ -25,4 +25,8 @@ public class Voca {
         this.spelling = spelling;
         this.meaning = meaning;
     }
+    public void updateVoca(String spelling, String meaning) {
+        this.spelling = spelling;
+        this.meaning = meaning;
+    }
 }

@@ -57,7 +57,11 @@
   cursor: pointer;
   font-weight: bold;
 }
-/*
+
+
+
+
+
 .admin-header {
   display: flex;
   justify-content: space-between;
@@ -68,13 +72,13 @@
   color: white;
   border-radius: 8px;
 }
-*/
+
 
 .admin-header h1 {
   margin: 0;
   font-size: 24px;
 }
-/*
+
 .admin-logo {
   width: 150px;
   height: 150px;
@@ -86,7 +90,7 @@
   top: 20px;
   margin: auto 0;
 }
-*/
+
 .admin-content {
   background-color: white;
   border-radius: 8px;
@@ -272,4 +276,3 @@ td button:last-child {
 .nav-button:hover:not(:disabled) {
   opacity: 0.9;
 }
-
