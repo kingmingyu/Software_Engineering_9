@@ -110,8 +110,6 @@ const LearningTablePage = () => {
     );
 };
 
-export default LearningTablePage;
-
 
   const goNext = () => {
       navigate("/main"); //메인 화면으로 이동

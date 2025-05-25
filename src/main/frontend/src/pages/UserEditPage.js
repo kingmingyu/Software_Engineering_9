@@ -16,9 +16,7 @@ const UserEditPage = () => {
         username: ""
     });
     const [profileImgUrl, setProfileImgUrl] = useState("");
-
     const navigate = useNavigate();  // useNavigate 훅 사용
-
 
     useEffect(() => {
         axios.get("/api/myPage", { withCredentials: true })
@@ -42,7 +40,6 @@ const UserEditPage = () => {
     };
 
     const handleLogout = () => {
-
         // 현재 로그인한 사용자의 localStorage 기록만 삭제
         if(userData.username){
             const userKey = getUserKey(userData.username);
@@ -56,13 +53,6 @@ const UserEditPage = () => {
             })
             .catch(() => alert("로그아웃 실패"));
     };
-
-            axios
-                .post("/logout")
-                .then(() => (window.location.href = "/login"))
-                .catch(() => alert("로그아웃 실패"));
-        };
-
 
     const handleSave = () => {
         axios.patch("/api/myPage/edit", userData, { withCredentials: true })
@@ -82,17 +72,12 @@ const UserEditPage = () => {
 
     return (
         <div className="user-edit-container">
-
             <div className="header-container">
                 <Header profileImgUrl={profileImgUrl} onLogout={handleLogout} />
             </div>
             <div className="logo-container">
                 <Logo />
             </div>
-
-            <Header profileImgUrl={profileImgUrl} onLogout={handleLogout} />
-            <Logo />
-
             <main className="user-edit-main">
                 <div className="form-group">
                     <label>이름</label>

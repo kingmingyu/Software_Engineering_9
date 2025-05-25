@@ -8,27 +8,21 @@ import CalendarBlock from "../component/CalendarBlock";
 import LearnButton from "../component/LearnButton";
 import "../pages/MainPage.css";
 import { useNavigate } from "react-router-dom";
-
 import defaultProfileImg from "../assets/images/Generic avatar.png";
 
 // 사용자별 localStorage 키 생성 함수
 const getUserKey = (username) => `completedDates_${username}`;
 
-
 const MainPage = () => {
     const [hello, setHello] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedDate, setSelectedDate] = useState(new Date());
-
     const [reloadTrigger, setReloadTrigger] = useState(0);
     const [profileImgUrl, setProfileImgUrl] = useState(defaultProfileImg);
 
     const navigate = useNavigate();
 
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-
-    const navigate = useNavigate();
-
 
     useEffect(() => {
         axios
@@ -91,7 +85,6 @@ const MainPage = () => {
 
             <main className="main-content">
                 <SearchBar
-
                     searchQuery={searchQuery}
                     setSearchQuery={setSearchQuery}
                     onMyVocaClick={() => navigate("/my-voca/card")}
@@ -103,13 +96,6 @@ const MainPage = () => {
                     currentUser={currentUser}
                     reloadTrigger={reloadTrigger}
                 />
-
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                  onMyVocaClick={() => navigate("/my-voca/card")} // 원하는 경로로 이동
-                />
-                <CalendarBlock selectedDate={selectedDate} onDateChange={setSelectedDate} />
-
                 <LearnButton onClick={() => navigate("/select-learning-type")} />
             </main>
         </div>
