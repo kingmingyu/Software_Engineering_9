@@ -6,25 +6,34 @@
     min-height: 100vh;
 }
 
-.user-edit-header {
-    background-color: #0c2d62;
-    padding: 20px;
+/* 상단 헤더 전체 컨테이너 */
+.header-container {
+    width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* 좌측 로고, 우측 프로필+로그아웃 */
     align-items: center;
-}
+    background-color: #0c2d62; /* 진한 파랑 */
+    box-sizing: border-box;
 
-.user-edit-logo {
     height: 60px;
-    margin-left: 20px;
+    padding: 0 20px;
 }
 
-.user-edit-header-right {
+/* 좌측 로고 컨테이너 */
+.logo-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+/* 우측 프로필+로그아웃 버튼 래퍼 */
+.header-wrapper {
     display: flex;
     align-items: center;
-    margin-right: 20px;
+    height: 100%;
 }
 
+/* 프로필 이미지 */
 .user-edit-profile-img {
     width: 36px;
     height: 36px;
@@ -32,6 +41,7 @@
     margin-right: 10px;
 }
 
+/* 로그아웃 버튼 */
 .logout-button {
     background-color: #333;
     color: white;
@@ -41,6 +51,7 @@
     cursor: pointer;
 }
 
+/* 메인 컨텐츠 영역 */
 .user-edit-main {
     display: flex;
     flex-direction: column;
@@ -48,6 +59,7 @@
     padding-top: 60px;
 }
 
+/* 폼 그룹 */
 .form-group {
     width: 300px;
     display: flex;
@@ -67,6 +79,7 @@
     background-color: #fff;
 }
 
+/* 저장 버튼 */
 .save-button {
     background-color: #4169e1;
     color: white;

@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import defaultProfileImg from "../assets/images/Generic avatar.png";
-import logo from "../assets/images/logo.png";
 import "./MyPage.css";
 import { useNavigate } from "react-router-dom";
+import Header from "../component/Header";
+import Logo from "../component/Logo";
 
+// 사용자별 localStorage 키 생성 함수
+const getUserKey = (username) => `completedDates_${username}`;
 
 const MyPage = () => {
     const [userData, setUserData] = useState({
         name: "",
         email: "",
         username: "",
-        password: ""
+        password: "",
+        profileImgUrl: ""
     });
-    const [showConfirmModal, setShowConfirmModal] = useState(false); // 모달 상태
+
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get("/api/myPage", { withCredentials: true })
@@ -25,22 +31,30 @@ const MyPage = () => {
     }, []);
 
     const handleLogout = () => {
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        if (currentUser && currentUser.username) {
+            const userKey = getUserKey(currentUser.username);
+            localStorage.removeItem("currentUser");
+            localStorage.removeItem(userKey); // 해당 사용자 기록 삭제
+        }
+
         axios.post("/logout", {}, { withCredentials: true })
-            .then(() => window.location.href = "/login")
+            .then(() => {
+                navigate("/login");
+            })
             .catch(() => alert("로그아웃 실패"));
     };
 
-    const navigate = useNavigate();
     const handleEditClick = () => {
-        navigate("/myPage/edit"); // 이 경로는 라우터에 등록된 edit 페이지 경로
+        navigate("/myPage/edit");
     };
 
     const handleWithdraw = () => {
-        // 실제 회원탈퇴 API 호출
         axios.delete("/api/user", { withCredentials: true })
             .then(() => {
                 alert("회원 탈퇴가 완료되었습니다.");
-                window.location.href = "/login"; // 로그인페이지로 이동
+                localStorage.clear();
+                navigate("/login");
             })
             .catch(err => {
                 alert("회원 탈퇴 실패");
@@ -50,18 +64,21 @@ const MyPage = () => {
 
     return (
         <div className="myPage-container">
-            <header className="myPage-header">
-                <img src={logo} alt="logo" className="myPage-logo" />
-                <div className="myPage-header-right">
-                    <button className="logout-button" onClick={handleLogout}>로그아웃</button>
-                </div>
-            </header>
+            <Header profileImgUrl={userData.profileImgUrl} onLogout={handleLogout} />
+            <Logo />
 
             <main className="myPage-main">
-                <div className="profile-img-container">
-                    <img src={defaultProfileImg} alt="profile" className="profile-img" />
-                    <button className="edit-button" onClick={handleEditClick}>수정하기</button>
+                <div className="mypage-profile-img-container">
+                    <img
+                        src={userData.profileImgUrl || defaultProfileImg}
+                        alt="profile"
+                        className="profile-img"
+                    />
+                    <button className="edit-button" onClick={handleEditClick}>
+                        수정하기
+                    </button>
                 </div>
+
                 <div className="user-info-form">
                     <label>이름</label>
                     <input type="text" value={userData.name} disabled />
@@ -70,6 +87,7 @@ const MyPage = () => {
                     <label>아이디</label>
                     <input type="text" value={userData.username} disabled />
                 </div>
+
                 <button className="withdraw-button" onClick={() => setShowConfirmModal(true)}>
                     회원탈퇴
                 </button>
@@ -79,8 +97,12 @@ const MyPage = () => {
                         <div className="modal">
                             <p>회원을 탈퇴하시겠습니까?</p>
                             <div className="modal-buttons">
-                                <button className="cancel-button" onClick={() => setShowConfirmModal(false)}>취소</button>
-                                <button className="confirm-button" onClick={handleWithdraw}>탈퇴</button>
+                                <button className="cancel-button" onClick={() => setShowConfirmModal(false)}>
+                                    취소
+                                </button>
+                                <button className="confirm-button" onClick={handleWithdraw}>
+                                    탈퇴
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -91,3 +113,4 @@ const MyPage = () => {
 };
 
 export default MyPage;
+

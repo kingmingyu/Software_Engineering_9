@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";  // ← 추가
 import logo from "../assets/images/logo.png";
 import defaultProfileImg from "../assets/images/Generic avatar.png";
 import "./UserEditPage.css";
+import Header from "../component/Header";
+import Logo from "../component/Logo";
+
+const getUserKey = (username) => `completedDates_${username}`;  // 사용자별 기록 key 생성 함수
 
 const UserEditPage = () => {
     const [userData, setUserData] = useState({
@@ -10,10 +15,19 @@ const UserEditPage = () => {
         email: "",
         username: ""
     });
+    const [profileImgUrl, setProfileImgUrl] = useState("");
+    const navigate = useNavigate();  // useNavigate 훅 사용
 
     useEffect(() => {
         axios.get("/api/myPage", { withCredentials: true })
-            .then(res => setUserData(res.data))
+            .then(res => {
+                setUserData(res.data);
+                if(res.data.profileImgUrl){
+                    setProfileImgUrl(res.data.profileImgUrl);
+                } else {
+                    setProfileImgUrl(defaultProfileImg);
+                }
+            })
             .catch(err => {
                 alert("사용자 정보를 불러오는데 실패했습니다.");
                 console.error(err);
@@ -23,6 +37,21 @@ const UserEditPage = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setUserData({ ...userData, [name]: value });
+    };
+
+    const handleLogout = () => {
+        // 현재 로그인한 사용자의 localStorage 기록만 삭제
+        if(userData.username){
+            const userKey = getUserKey(userData.username);
+            localStorage.removeItem("currentUser");
+            localStorage.removeItem(userKey);
+        }
+
+        axios.post("/logout", {}, { withCredentials: true })
+            .then(() => {
+                navigate("/login");  // 로그아웃 후 로그인 페이지로 이동
+            })
+            .catch(() => alert("로그아웃 실패"));
     };
 
     const handleSave = () => {
@@ -43,13 +72,12 @@ const UserEditPage = () => {
 
     return (
         <div className="user-edit-container">
-            <header className="user-edit-header">
-                <img src={logo} alt="logo" className="user-edit-logo" />
-                <div className="user-edit-header-right">
-                    <img src={defaultProfileImg} alt="profile" className="user-edit-profile-img" />
-                    <button className="logout-button">로그아웃</button>
-                </div>
-            </header>
+            <div className="header-container">
+                <Header profileImgUrl={profileImgUrl} onLogout={handleLogout} />
+            </div>
+            <div className="logo-container">
+                <Logo />
+            </div>
             <main className="user-edit-main">
                 <div className="form-group">
                     <label>이름</label>

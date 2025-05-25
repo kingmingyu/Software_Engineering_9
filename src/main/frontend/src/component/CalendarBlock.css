@@ -3,6 +3,94 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
+    background-color: white;
+}
+.calendar-continer{
+    width: 100%;
+    max-width: 500px;
+    background-color: white;
+}
+
+/* 캘린더 기본 설정 */
+.react-calendar {
+    width: 100%;
+    max-width: 500px;
+    background-color: white;
+    border: none;
+    font-family: 'Arial', sans-serif;
+}
+
+/* 캘린더 타일 */
+.react-calendar__tile {
+    position: relative;
+    z-index: 1;
+    padding: 10px 6px;
+    font-size: 14px;
+    text-align: center;
+    border: none;
+    outline: none;
+    background: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border-radius: 6px;
+}
+
+/* 오늘 날짜 타일 */
+.react-calendar__tile--now {
+    background: #e6f0ff;
+    font-weight: bold;
+}
+
+/* 선택된 날짜 타일 */
+.react-calendar__tile--active {
+    background: #007bff;
+    color: white;
+}
+
+/* 타일 hover 효과 */
+.react-calendar__tile:hover {
+    background-color: #f0f0f0;
+}
+
+/* 퍼즐 조각이 표시될 타일 */
+.react-calendar__tile .puzzle-piece {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    border-radius: 6px;
+    pointer-events: none;
+}
+
+.main-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px 0 20px;
+    margin-top: 10px;
+}
+.calendar-search-input{
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 70px;
+    outline-color: #007bff;
+}
+/*.calendar-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: white;
 }
 
 .calendar-container {
@@ -16,6 +104,7 @@
     width: 100%;
     background-color: white;
     font-family: Arial, sans-serif;
+    max-width: 500px;
 }
 
 .react-calendar__tile {
@@ -54,7 +143,7 @@
     padding: 0;
 }
 
-.puzzle-piece {
+.react-calendar--tile .puzzle-piece {
     position: absolute;
     top: 0;
     left: 0;
@@ -62,7 +151,7 @@
     width: 100%;
     background-repeat: no-repeat;
     background-color: unset;
-    background-position: unset;
+    background-position: center;
     background-size: cover;
     z-index: 0;
     border-radius: 6px;
@@ -86,3 +175,4 @@
     margin-bottom: 70px;
     outline-color: #007bff;
 }
+*/

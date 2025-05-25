@@ -5,10 +5,18 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 function LoginPage() {
-  const [hello, setHello] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate(); // 추가
+  const navigate = useNavigate();
+
+  // 아이디/비밀번호 찾기 모달 관련 상태
+  const [showFindModal, setShowFindModal] = useState(false);
+  const [findType, setFindType] = useState('username'); // 'username' or 'password'
+  const [findName, setFindName] = useState('');
+  const [findEmail, setFindEmail] = useState('');
+  const [findId, setFindId] = useState('');
+  const [findResult, setFindResult] = useState('');
+  const [findError, setFindError] = useState('');
 
   // 로그인 처리 함수
   const handleLogin = async () => {
@@ -30,9 +38,18 @@ function LoginPage() {
     .then(async (res) => {
       if (res.status === 200) {
         try {
+          // 관리자 권한 확인
           const check = await axios.get("/api/main", { withCredentials: true });
           if (check.status === 200) {
+            // 응답 헤더에서 리다이렉트 URL 확인
+            localStorage.setItem("currentUser", JSON.stringify(check.data));
+
+            const redirectUrl = res.headers['location'];
+            if (redirectUrl === '/admin') {
+              navigate("/admin");
+            } else {
             navigate("/main");
+            }
           } else {
             alert("인증되지 않은 사용자입니다.");
           }
@@ -53,6 +70,34 @@ function LoginPage() {
     });
   };
 
+  // 아이디/비밀번호 찾기 요청
+  const handleFind = async () => {
+    setFindResult('');
+    setFindError('');
+    if (findType === 'username') {
+      if (!findName || !findEmail) {
+        setFindError('이름과 이메일을 모두 입력하세요.');
+        return;
+      }
+      try {
+        const res = await axios.get(`/api/find/username`, { params: { name: findName, email: findEmail } });
+        setFindResult(`아이디: ${res.data.result}`);
+      } catch (err) {
+        setFindError(err.response?.data || '일치하는 정보가 없습니다.');
+      }
+    } else {
+      if (!findName || !findId) {
+        setFindError('이름과 아이디를 모두 입력하세요.');
+        return;
+      }
+      try {
+        const res = await axios.get(`/api/find/password`, { params: { name: findName, username: findId } });
+        setFindResult(`비밀번호: ${res.data.result}`);
+      } catch (err) {
+        setFindError(err.response?.data || '일치하는 정보가 없습니다.');
+      }
+    }
+  };
 
   return (
     <div className="login-container">
@@ -83,16 +128,73 @@ function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <p className="find-info">아이디/비밀번호 찾기</p>
+          <p className="find-info" onClick={() => setShowFindModal(true)}>아이디/비밀번호 찾기</p>
 
           {/*로그인 버튼*/}
           <button type="button" className="login-button" onClick={handleLogin}>로그인</button>
 
-          <p className="signup-link" onClick={() => navigate("/signup")}>
-            회원가입
-          </p>
+          <p className="signup-link" onClick={() => navigate("/signup")}>회원가입</p>
         </div>
       </div>
+
+      {/* 아이디/비밀번호 찾기 모달 */}
+      {showFindModal && (
+        <div className="modal-backdrop">
+          <div className="modal">
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
+              <button
+                className={findType === 'username' ? 'active' : ''}
+                style={{ marginRight: 8 }}
+                onClick={() => { setFindType('username'); setFindResult(''); setFindError(''); }}
+              >아이디 찾기</button>
+              <button
+                className={findType === 'password' ? 'active' : ''}
+                onClick={() => { setFindType('password'); setFindResult(''); setFindError(''); }}
+              >비밀번호 찾기</button>
+            </div>
+            <div style={{ marginBottom: 8 }}>
+              <input
+                className="input-box"
+                type="text"
+                placeholder="이름"
+                value={findName}
+                onChange={e => setFindName(e.target.value)}
+                style={{ marginBottom: 8, width: '100%' }}
+              />
+              {findType === 'username' ? (
+                <input
+                  className="input-box"
+                  type="email"
+                  placeholder="이메일"
+                  value={findEmail}
+                  onChange={e => setFindEmail(e.target.value)}
+                  style={{ width: '100%' }}
+                />
+              ) : (
+                <input
+                  className="input-box"
+                  type="text"
+                  placeholder="아이디"
+                  value={findId}
+                  onChange={e => setFindId(e.target.value)}
+                  style={{ width: '100%' }}
+                />
+              )}
+            </div>
+            <button className="login-button" style={{ width: '100%' }} onClick={handleFind}>
+              {findType === 'username' ? '아이디 찾기' : '비밀번호 찾기'}
+            </button>
+            {findResult && <div style={{ color: 'green', marginTop: 12 }}>{findResult}</div>}
+            {findError && <div style={{ color: 'red', marginTop: 12 }}>{findError}</div>}
+            <div className="modal-buttons" style={{ marginTop: 16 }}>
+              <button className="cancel-button" onClick={() => {
+                setShowFindModal(false);
+                setFindName(''); setFindEmail(''); setFindId(''); setFindResult(''); setFindError('');
+              }}>닫기</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

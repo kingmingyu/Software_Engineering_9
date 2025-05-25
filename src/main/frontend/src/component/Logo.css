@@ -1,8 +1,36 @@
+
+.logo-wrapper {
+    padding: 8px 0;
+    margin: 0;
+    background-color: white;
+    border-bottom: none;
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.logo-image {
+    width: 160px;
+    height: auto;
+    user-select: none;
+    display: block;
+    margin: 0;
+}
+.logo-wrapper:hover{
+    opacity: 0.8;
+}
+
+/*
 .logo-wrapper {
     padding: 8px 20px;
     background-color: white;
     border-bottom: none;
     margin-bottom: 0;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.logo-wrapper:hover{
+    opacity: 0.8;
 }
 
 .logo-image {
@@ -10,3 +38,4 @@
     height: auto;
     user-select: none;
 }
+*/
