@@ -12,14 +12,16 @@ const LearningCardPage = () => {
     const [index, setIndex] = useState(0);
     const [showMeaning, setShowMeaning] = useState(true);
     const [profileImgUrl, setProfileImgUrl] = useState(defaultProfileImg);
+
     const navigate = useNavigate();
 
+    // 유저 정보 키 관련 함수
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     const getUserKey = (username) => `completedDates_${username}`;
 
     useEffect(() => {
-        // 단어 목록 불러오기
-        axios.get("/api/user-voca", { withCredentials: true })
+        // 오늘의 단어 불러오기
+        axios.get("/api/learn/today", { withCredentials: true })
             .then(res => setWords(res.data))
             .catch(err => {
                 console.error("단어 불러오기 실패", err);
@@ -27,9 +29,10 @@ const LearningCardPage = () => {
             });
 
         // 프로필 이미지 불러오기
-        axios.get("/api/learn/today", { withCredentials: true })
+        axios.get("/api/myPage", { withCredentials: true })
             .then(res => {
-                setProfileImgUrl(res.data.profileImgUrl || defaultProfileImg);
+                const user = res.data;
+                setProfileImgUrl(user.profileImgUrl || defaultProfileImg);
             })
             .catch(err => {
                 console.error("프로필 이미지 불러오기 실패", err);
@@ -37,10 +40,61 @@ const LearningCardPage = () => {
             });
     }, []);
 
+    const goNext = () => {
+        if (index < words.length - 1) {
+            setIndex(index + 1);
+        } else {
+            alert("테스트를 완료하여 스템프를 받아보세요!");
+            navigate("/select-learning-type");
+        }
+    };
+
+    const goPrev = () => {
+        if (index > 0) setIndex(index - 1);
+    };
+
+    const goToTablePage = () => {
+        navigate("/learn/table");
+    };
+
+    const toggleMeaning = () => {
+        setShowMeaning(!showMeaning);
+    };
+
+    const handleSave = async () => {
+        const currentWord = words[index];
+        try {
+            await axios.post("/api/user-voca", {
+                spelling: currentWord.spelling,
+                meaning: currentWord.meaning
+            }, { withCredentials: true });
+
+            alert("단어장에 저장되었습니다!");
+        } catch (e) {
+            if (e.response?.status === 409) {
+                alert("이미 저장된 단어입니다!");
+            } else {
+                alert("저장 실패!");
+                console.error(e);
+            }
+        }
+    };
+
     const handleLogout = () => {
         if (currentUser?.username) {
             const userKey = getUserKey(currentUser.username);
-            localStorage.removeItem("currentUser");
+            localStorage.removeItem("currentUser");const handleLogout = () => {
+                if (currentUser) {
+                    const userKey = getUserKey(currentUser.username);
+                    localStorage.removeItem(userKey); // 🔥 해당 사용자 기록만 삭제
+                }
+
+                axios.post("/logout")
+                    .then(() => {
+                        navigate("/login");
+                    })
+                    .catch(() => alert("로그아웃 실패"));
+            };
             localStorage.removeItem(userKey);
         }
 
@@ -51,49 +105,6 @@ const LearningCardPage = () => {
             .catch(() => alert("로그아웃 실패"));
     };
 
-    const goNext = () => {
-        if (index < words.length - 1) {
-            setIndex(index + 1);
-        } else {
-            alert("저장된 모든 단어를 학습했습니다.");
-            navigate("/main");
-        }
-    };
-
-    const goPrev = () => {
-        if (index > 0) setIndex(index - 1);
-    };
-
-    const goToTablePage = () => {
-        navigate("/my-voca/table");
-    };
-
-    const toggleMeaning = () => {
-        setShowMeaning(!showMeaning);
-    };
-
-    const handleDelete = async () => {
-        const currentWord = words[index];
-        if (!currentWord.id) {
-            alert("단어 ID가 없어 삭제할 수 없습니다.");
-            return;
-        }
-
-        try {
-            await axios.delete(`/api/user-voca/${currentWord.id}`, {
-                withCredentials: true
-            });
-            alert("단어가 삭제되었습니다!");
-
-            const updatedWords = words.filter((_, i) => i !== index);
-            setWords(updatedWords);
-            setIndex((prev) => Math.max(0, prev - 1));
-        } catch (e) {
-            alert("삭제 실패!");
-            console.error(e);
-        }
-    };
-
     if (words.length === 0) {
         return <div className="card-main">단어를 불러오는 중입니다...</div>;
     }
@@ -102,13 +113,8 @@ const LearningCardPage = () => {
 
     return (
         <div className="card-page-container">
-            <div className="header-container">
-                <Header profileImgUrl={profileImgUrl} onLogout={handleLogout} />
-            </div>
-
-            <div className="logo-container">
-                <Logo />
-            </div>
+            <Header profileImgUrl={profileImgUrl} onLogout={handleLogout} />
+            <Logo />
 
             <div className="card-main">
                 <div className="card-box">
@@ -123,20 +129,17 @@ const LearningCardPage = () => {
                 </div>
 
                 {index === words.length - 1 && (
-                    <div className="complete-message">
-                        저장한 단어를 모두 학습했어요
-                    </div>
+                    <div className="complete-message">오늘 학습을 완료했어요!</div>
                 )}
 
                 <div className="card-buttons">
                     <button onClick={goPrev}>◀</button>
-                    <button onClick={toggleMeaning}>뜻</button>
                     <button onClick={goToTablePage}>≡</button>
                     <button onClick={goNext}>▶</button>
                 </div>
 
-                <button className="save-btn" onClick={handleDelete}>
-                    삭제하기
+                <button className="save-btn" onClick={handleSave}>
+                    나만의 단어장 저장
                 </button>
             </div>
         </div>

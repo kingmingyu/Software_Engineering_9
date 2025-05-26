@@ -31,14 +31,12 @@ const MyPage = () => {
     }, []);
 
     const handleLogout = () => {
-        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        if (currentUser && currentUser.username) {
+        if (currentUser) {
             const userKey = getUserKey(currentUser.username);
-            localStorage.removeItem("currentUser");
-            localStorage.removeItem(userKey); // 해당 사용자 기록 삭제
+            localStorage.removeItem(userKey); // 🔥 해당 사용자 기록만 삭제
         }
 
-        axios.post("/logout", {}, { withCredentials: true })
+        axios.post("/logout")
             .then(() => {
                 navigate("/login");
             })

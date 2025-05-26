@@ -49,20 +49,16 @@ const LearningTypeSelection = () => {
     }, [currentUser]);
 
     const handleLogout = () => {
-        if (currentUser?.username) {
+        if (currentUser) {
             const userKey = getUserKey(currentUser.username);
-            localStorage.removeItem("currentUser");
-            localStorage.removeItem(userKey);
+            localStorage.removeItem(userKey); // 🔥 해당 사용자 기록만 삭제
         }
 
-        axios.post("/logout", {}, { withCredentials: true })
+        axios.post("/logout")
             .then(() => {
                 navigate("/login");
             })
-            .catch((err) => {
-                alert("로그아웃 실패");
-                console.error("로그아웃 에러:", err);
-            });
+            .catch(() => alert("로그아웃 실패"));
     };
 
     // 이미지 로딩 실패 시 기본 이미지로 대체

@@ -23,7 +23,6 @@ const WordTestPage = () => {
     const handleLogout = () => {
         if (currentUser) {
             const userKey = getUserKey(currentUser.username);
-            localStorage.removeItem("currentUser");
             localStorage.removeItem(userKey); // 🔥 해당 사용자 기록만 삭제
         }
 

@@ -51,13 +51,12 @@ const MainPage = () => {
     }, []);
 
     const handleLogout = () => {
-        if (currentUser && currentUser.username) {
+        if (currentUser) {
             const userKey = getUserKey(currentUser.username);
-            localStorage.removeItem("currentUser");
-            localStorage.removeItem(userKey);
+            localStorage.removeItem(userKey); // 🔥 해당 사용자 기록만 삭제
         }
 
-        axios.post("/logout", {}, { withCredentials: true })
+        axios.post("/logout")
             .then(() => {
                 navigate("/login");
             })

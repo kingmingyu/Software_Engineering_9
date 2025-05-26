@@ -40,16 +40,14 @@ const UserEditPage = () => {
     };
 
     const handleLogout = () => {
-        // 현재 로그인한 사용자의 localStorage 기록만 삭제
-        if(userData.username){
-            const userKey = getUserKey(userData.username);
-            localStorage.removeItem("currentUser");
-            localStorage.removeItem(userKey);
+        if (currentUser) {
+            const userKey = getUserKey(currentUser.username);
+            localStorage.removeItem(userKey); // 🔥 해당 사용자 기록만 삭제
         }
 
-        axios.post("/logout", {}, { withCredentials: true })
+        axios.post("/logout")
             .then(() => {
-                navigate("/login");  // 로그아웃 후 로그인 페이지로 이동
+                navigate("/login");
             })
             .catch(() => alert("로그아웃 실패"));
     };

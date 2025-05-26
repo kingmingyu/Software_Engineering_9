@@ -20,15 +20,14 @@ const LearningTablePage = () => {
 
     // ✅ 로그아웃 처리
     const handleLogout = () => {
-        if (currentUser?.username) {
+        if (currentUser) {
             const userKey = getUserKey(currentUser.username);
-            localStorage.removeItem("currentUser");
-            localStorage.removeItem(userKey);
+            localStorage.removeItem(userKey); // 🔥 해당 사용자 기록만 삭제
         }
 
-        axios.post("/logout", {}, { withCredentials: true })
+        axios.post("/logout")
             .then(() => {
-                window.location.href = "/login";
+                navigate("/login");
             })
             .catch(() => alert("로그아웃 실패"));
     };
