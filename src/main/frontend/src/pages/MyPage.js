@@ -8,6 +8,7 @@ import Logo from "../component/Logo";
 
 // 사용자별 localStorage 키 생성 함수
 const getUserKey = (username) => `completedDates_${username}`;
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
 const MyPage = () => {
     const [userData, setUserData] = useState({

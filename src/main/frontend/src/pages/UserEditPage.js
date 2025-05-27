@@ -8,6 +8,7 @@ import Header from "../component/Header";
 import Logo from "../component/Logo";
 
 const getUserKey = (username) => `completedDates_${username}`;  // 사용자별 기록 key 생성 함수
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
 const UserEditPage = () => {
     const [userData, setUserData] = useState({
