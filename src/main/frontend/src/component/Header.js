@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import defaultProfileImg from "../assets/images/Generic avatar.png";
 import "../component/Header.css";
 
-const Header = ({ profileImgUrl = defaultProfileImg, onLogout }) => {
+const Header = ({ profileImgUrl = defaultProfileImg, onLogout, title }) => {
     const navigate = useNavigate();
 
     return (
@@ -12,6 +12,7 @@ const Header = ({ profileImgUrl = defaultProfileImg, onLogout }) => {
             <div className="header-section left">
             </div>
             <div className="header-section center">
+                {title && <h1 className="header-title">{title}</h1>}
             </div>
             <div className="header-section right">
                 <button className="profile-button" onClick={() => navigate("/myPage")}>

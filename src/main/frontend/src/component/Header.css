@@ -23,6 +23,14 @@
     justify-content: center;
 }
 
+/* 헤더 타이틀 스타일 */
+.header-title {
+    color: white;
+    font-size: 24px;
+    margin: 0;
+    font-weight: bold;
+}
+
 /* 오른쪽 버튼들 우측 정렬 */
 .header-section.right {
     justify-content: flex-end;

@@ -79,16 +79,8 @@ function AdminPage() {
 
     return (
         <div className="admin-container">
-
-            <Header />
-                <Logo />
-                <h1>VOCAcino 관리자 페이지</h1>
-
-            <header className="admin-header">
-                <h1>VOCAcino 관리자 페이지</h1>
-                <div className="admin-logo" />
-            </header>
-
+            <Header title="VOCAcino 관리자 페이지" />
+            <Logo />
 
             <div className="admin-content">
                 <div className="add-voca-section">
