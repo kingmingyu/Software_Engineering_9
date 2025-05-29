@@ -84,16 +84,26 @@ const WordTestPage = () => {
 
     // ✅ 테스트 완료 시 날짜 저장
     useEffect(() => {
-        if (isTestFinished && currentUser) {
-            const today = new Date().toISOString().split("T")[0];
-            const userKey = getUserKey(currentUser.username);
-            const saved = JSON.parse(localStorage.getItem(userKey) || "[]");
+        if (!isTestFinished || !currentUser) return;
 
-            if (!saved.includes(today)) {
-                const updated = [...saved, today];
-                localStorage.setItem(userKey, JSON.stringify(updated));
-                setCompletedDates(updated); // 상태도 반영
-            }
+        const today = new Date().toISOString().split("T")[0];
+        const userKey = getUserKey(currentUser.username);
+        const saved = JSON.parse(localStorage.getItem(userKey) || "[]");
+
+        if (!saved.includes(today)) {
+            const updated = [...saved, today];
+            localStorage.setItem(userKey, JSON.stringify(updated));
+            setCompletedDates(updated);
+        }
+
+        // ✅ 합격 여부 판단
+        const correctCount = words.length - wrongAnswers.length;
+        if (correctCount >= 18) {
+            axios.post("/api/learn/increase", {}, { withCredentials: true })
+                .then(() => console.log("✅ 학습 데이터 1 증가 완료"))
+                .catch((err) => {
+                    console.warn("❌ 학습 데이터 증가 실패", err);
+                });
         }
     }, [isTestFinished, currentUser]);
 
