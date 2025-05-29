@@ -83,7 +83,7 @@ const WordTestPage = () => {
     useEffect(() => {
         if (!isTestFinished || !currentUser) return;
 
-        const today = new Date().toISOString().split("T")[0];
+        const today = getToday();
         const userKey = `completedDates_${currentUser.username}`;
 
         // ✅ 로컬스토리지 저장
@@ -97,7 +97,7 @@ const WordTestPage = () => {
         // ✅ 서버에 학습 날짜 저장
         axios.post(
             `/api/progress/${currentUser.username}`,
-            {data: today},
+            { date: today },
             {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true
@@ -105,10 +105,10 @@ const WordTestPage = () => {
         )
             .then(() => {
                 setCompletedDates(prev => [...prev, today]);
-                setReloadTrigger(prev => prev + 1); // 캘린더 새로고침
+                setReloadTrigger(prev => prev + 1);
             })
             .catch(() => {
-                //alert("학습 날짜 저장 실패");
+                // alert("학습 날짜 저장 실패");
             });
 
         // ✅ 점수가 18 이상이면 학습 데이터 증가
@@ -122,7 +122,6 @@ const WordTestPage = () => {
         }
 
     }, [isTestFinished, currentUser]);
-
 
     const handleSubmit = (e) => {
         e.preventDefault();
