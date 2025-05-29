@@ -14,34 +14,29 @@ const WordTestPage = () => {
     const [isTestFinished, setIsTestFinished] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
     const [completedDates, setCompletedDates] = useState([]);
+    const [reloadTrigger, setReloadTrigger] = useState(0);
     const navigate = useNavigate();
 
-    // ✅ 사용자별 저장 키 생성 함수
-    const getUserKey = (username) => `completedDates_${username}`;
+    const getToday = () => new Date().toISOString().split("T")[0];
 
-    // ✅ 로그아웃 시 현재 유저 기록만 삭제
     const handleLogout = () => {
-        if (currentUser) {
-            const userKey = getUserKey(currentUser.username);
-            localStorage.removeItem(userKey); // 🔥 해당 사용자 기록만 삭제
-        }
-
-        axios.post("/logout")
-            .then(() => {
-                setCurrentUser(null);
-                setCompletedDates([]);
-                navigate("/login");
-            })
-            .catch(() => alert("로그아웃 실패"));
+        axios.post("/logout").then(() => {
+            setCurrentUser(null);
+            navigate("/login");
+        }).catch(() => alert("로그아웃 실패"));
     };
 
-    // ✅ 로그인 유저 불러오기
     useEffect(() => {
         axios.get("/api/main", { withCredentials: true })
             .then((res) => {
-                const user = res.data;
+                let user = res.data;
+                if (Array.isArray(user)) {
+                    user = { username: user.join("") };
+                } else if (typeof user === "string") {
+                    user = { username: user };
+                }
+                console.log("로그인 유저 정보:", user);
                 setCurrentUser(user);
-                localStorage.setItem("currentUser", JSON.stringify(user));
             })
             .catch(() => {
                 alert("로그인 상태 확인 실패");
@@ -49,16 +44,20 @@ const WordTestPage = () => {
             });
     }, []);
 
-    // ✅ 로그인 후 해당 유저의 기록 불러오기
     useEffect(() => {
-        if (currentUser) {
-            const userKey = getUserKey(currentUser.username);
-            const saved = JSON.parse(localStorage.getItem(userKey) || "[]");
-            setCompletedDates(saved);
-        }
-    }, [currentUser]);
+        if (!currentUser) return;
 
-    // ✅ 중복 제거 후 랜덤 20개 단어 추출
+        setCompletedDates([]);
+
+        axios.get(`/api/progress/${currentUser.username}`, { withCredentials: true })
+            .then(res => {
+                setCompletedDates(res.data || []);
+            })
+            .catch(() => {
+                alert("완료 날짜를 불러오지 못했습니다.");
+            });
+    }, [currentUser, reloadTrigger]);
+
     const getUniqueRandomSubset = (array, count) => {
         const uniqueMap = new Map();
         array.forEach((item) => {
@@ -69,7 +68,6 @@ const WordTestPage = () => {
         return shuffled.slice(0, count);
     };
 
-    // ✅ 단어 리스트 가져오기
     useEffect(() => {
         if (!currentUser) return;
 
@@ -82,22 +80,50 @@ const WordTestPage = () => {
             .catch(() => alert("단어를 불러올 수 없습니다."));
     }, [currentUser]);
 
-    // ✅ 테스트 완료 시 날짜 저장
     useEffect(() => {
-        if (isTestFinished && currentUser) {
-            const today = new Date().toISOString().split("T")[0];
-            const userKey = getUserKey(currentUser.username);
-            const saved = JSON.parse(localStorage.getItem(userKey) || "[]");
+        if (!isTestFinished || !currentUser) return;
 
-            if (!saved.includes(today)) {
-                const updated = [...saved, today];
-                localStorage.setItem(userKey, JSON.stringify(updated));
-                setCompletedDates(updated); // 상태도 반영
-            }
+        const today = new Date().toISOString().split("T")[0];
+        const userKey = `completedDates_${currentUser.username}`;
+
+        // ✅ 로컬스토리지 저장
+        const saved = JSON.parse(localStorage.getItem(userKey) || "[]");
+        if (!saved.includes(today)) {
+            const updated = [...saved, today];
+            localStorage.setItem(userKey, JSON.stringify(updated));
+            setCompletedDates(updated);
         }
+
+        // ✅ 서버에 학습 날짜 저장
+        axios.post(
+            `/api/progress/${currentUser.username}`,
+            {data: today},
+            {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true
+            }
+        )
+            .then(() => {
+                setCompletedDates(prev => [...prev, today]);
+                setReloadTrigger(prev => prev + 1); // 캘린더 새로고침
+            })
+            .catch(() => {
+                //alert("학습 날짜 저장 실패");
+            });
+
+        // ✅ 점수가 18 이상이면 학습 데이터 증가
+        const correctCount = words.length - wrongAnswers.length;
+        if (correctCount >= 18) {
+            axios.post("/api/learn/increase", {}, { withCredentials: true })
+                .then(() => console.log("✅ 학습 데이터 1 증가 완료"))
+                .catch((err) => {
+                    console.warn("❌ 학습 데이터 증가 실패", err);
+                });
+        }
+
     }, [isTestFinished, currentUser]);
 
-    // ✅ 정답 제출
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -134,16 +160,12 @@ const WordTestPage = () => {
             {isTestFinished ? (
                 <div className="result-summary">
                     <h2>테스트 완료!</h2>
-                    <p>
-                        최종 점수: {words.length - wrongAnswers.length} / {words.length}
-                    </p>
-
+                    <p>최종 점수: {words.length - wrongAnswers.length} / {words.length}</p>
                     {words.length - wrongAnswers.length >= 18 ? (
                         <p className="pass">✅ 합격입니다! 축하해요!</p>
                     ) : (
                         <p className="fail">❌ 불합격입니다. 다시 도전해보세요!</p>
                     )}
-
                     {wrongAnswers.length > 0 ? (
                         <table className="wrong-table">
                             <thead>
@@ -194,4 +216,3 @@ const WordTestPage = () => {
 };
 
 export default WordTestPage;
-

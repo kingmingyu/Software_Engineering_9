@@ -1,5 +1,4 @@
 // src/pages/LearningTypeSelection.js
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./LearningTypeSelection.css";
@@ -25,8 +24,6 @@ const LearningTypeSelection = () => {
         }
     }, [navigate]);
 
-    const getUserKey = (username) => `completedDates_${username}`;
-
     useEffect(() => {
         if (!currentUser) return;
 
@@ -49,19 +46,15 @@ const LearningTypeSelection = () => {
     }, [currentUser]);
 
     const handleLogout = () => {
-        if (currentUser) {
-            const userKey = getUserKey(currentUser.username);
-            localStorage.removeItem(userKey); // 🔥 해당 사용자 기록만 삭제
-        }
-
         axios.post("/logout")
             .then(() => {
+                setCurrentUser(null);
+                localStorage.removeItem("currentUser");
                 navigate("/login");
             })
             .catch(() => alert("로그아웃 실패"));
     };
 
-    // 이미지 로딩 실패 시 기본 이미지로 대체
     const handleImageError = (e) => {
         e.target.onerror = null; // 무한 루프 방지
         e.target.src = defaultProfileImg;
@@ -73,7 +66,7 @@ const LearningTypeSelection = () => {
             <Header
                 profileImgUrl={profileImgUrl}
                 onLogout={handleLogout}
-                onImageError={handleImageError} // Header에 전달
+                onImageError={handleImageError}
             />
             <Logo />
             <main className="selection-main">
@@ -97,4 +90,3 @@ const LearningTypeSelection = () => {
 };
 
 export default LearningTypeSelection;
-

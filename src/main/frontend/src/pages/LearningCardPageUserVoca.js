@@ -9,30 +9,22 @@ import defaultProfileImg from "../assets/images/Generic avatar.png";
 
 const LearningTablePage = () => {
     const [words, setWords] = useState([]);
-    const [profileImgUrl, setProfileImgUrl] = useState("");
+    const [profileImgUrl, setProfileImgUrl] = useState(defaultProfileImg);
     const navigate = useNavigate();
 
-    // ✅ currentUser 가져오기
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
-    // ✅ 사용자별 key 생성 함수
-    const getUserKey = (username) => `completedDates_${username}`;
-
-    // ✅ 로그아웃 처리
+    // 로그아웃 처리
     const handleLogout = () => {
-        if (currentUser) {
-            const userKey = getUserKey(currentUser.username);
-            localStorage.removeItem(userKey); // 🔥 해당 사용자 기록만 삭제
-        }
-
         axios.post("/logout")
             .then(() => {
+                localStorage.removeItem("currentUser");
                 navigate("/login");
             })
             .catch(() => alert("로그아웃 실패"));
     };
 
-    // ✅ 단어 목록 가져오기
+    // 단어 목록 가져오기
     useEffect(() => {
         axios.get("/api/user-voca", { withCredentials: true })
             .then(res => setWords(res.data))
@@ -42,7 +34,7 @@ const LearningTablePage = () => {
             });
     }, []);
 
-    // ✅ 프로필 이미지 불러오기
+    // 프로필 이미지 불러오기
     useEffect(() => {
         axios.get("/api/learn/today", { withCredentials: true })
             .then(res => {
@@ -64,7 +56,7 @@ const LearningTablePage = () => {
                 <Header profileImgUrl={profileImgUrl} onLogout={handleLogout} />
             </div>
 
-            <div className="logo-container"> {/* 🛠 오타 수정 */}
+            <div className="logo-container">
                 <Logo />
             </div>
 
@@ -102,5 +94,3 @@ const LearningTablePage = () => {
 };
 
 export default LearningTablePage;
-
-

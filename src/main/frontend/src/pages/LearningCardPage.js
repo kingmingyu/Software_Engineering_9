@@ -15,9 +15,9 @@ const LearningCardPage = () => {
 
     const navigate = useNavigate();
 
-    // 유저 정보 키 관련 함수
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    const getUserKey = (username) => `completedDates_${username}`;
+    // 현재 로그인한 유저 정보
+    const storedUser = localStorage.getItem("currentUser");
+    const currentUser = storedUser ? JSON.parse(storedUser) : null;
 
     useEffect(() => {
         // 오늘의 단어 불러오기
@@ -42,7 +42,7 @@ const LearningCardPage = () => {
 
     const goNext = () => {
         if (index < words.length - 1) {
-            setIndex(index + 1);
+            setIndex(prevIndex => prevIndex + 1);
         } else {
             alert("테스트를 완료하여 스템프를 받아보세요!");
             navigate("/select-learning-type");
@@ -50,7 +50,7 @@ const LearningCardPage = () => {
     };
 
     const goPrev = () => {
-        if (index > 0) setIndex(index - 1);
+        setIndex(prevIndex => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
     };
 
     const goToTablePage = () => {
@@ -58,7 +58,7 @@ const LearningCardPage = () => {
     };
 
     const toggleMeaning = () => {
-        setShowMeaning(!showMeaning);
+        setShowMeaning(prev => !prev);
     };
 
     const handleSave = async () => {
@@ -81,25 +81,9 @@ const LearningCardPage = () => {
     };
 
     const handleLogout = () => {
-        if (currentUser?.username) {
-            const userKey = getUserKey(currentUser.username);
-            localStorage.removeItem("currentUser");const handleLogout = () => {
-                if (currentUser) {
-                    const userKey = getUserKey(currentUser.username);
-                    localStorage.removeItem(userKey); // 🔥 해당 사용자 기록만 삭제
-                }
-
-                axios.post("/logout")
-                    .then(() => {
-                        navigate("/login");
-                    })
-                    .catch(() => alert("로그아웃 실패"));
-            };
-            localStorage.removeItem(userKey);
-        }
-
-        axios.post("/logout", {}, { withCredentials: true })
+        axios.post("/logout")
             .then(() => {
+                localStorage.removeItem("currentUser");
                 navigate("/login");
             })
             .catch(() => alert("로그아웃 실패"));
@@ -119,11 +103,11 @@ const LearningCardPage = () => {
             <div className="card-main">
                 <div className="card-box">
                     <div className="english-word">{currentWord.spelling}</div>
+
                     {showMeaning && (
                         <div className="korean-meaning">{currentWord.meaning}</div>
                     )}
                 </div>
-
                 <div className="word-progress">
                     {index + 1} / {words.length}
                 </div>
@@ -133,7 +117,7 @@ const LearningCardPage = () => {
                 )}
 
                 <div className="card-buttons">
-                    <button onClick={goPrev}>◀</button>
+                    <button onClick={goPrev} disabled={index === 0}>◀</button>
                     <button onClick={goToTablePage}>≡</button>
                     <button onClick={goNext}>▶</button>
                 </div>

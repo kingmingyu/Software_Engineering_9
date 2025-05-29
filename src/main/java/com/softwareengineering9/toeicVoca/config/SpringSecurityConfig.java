@@ -49,6 +49,7 @@ public class SpringSecurityConfig {
                         .requestMatchers("/doLogin").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/signup").permitAll()
+                        .requestMatchers("/api/find/**").permitAll()
                         .requestMatchers("/main").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated()
