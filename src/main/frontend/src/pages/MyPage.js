@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../component/Header";
 import Logo from "../component/Logo";
 
-// 사용자별 localStorage 키 생성 함수 (필요 시 사용)
+// 사용자별 localStorage 키 생성 함수
 const getUserKey = (username) => `completedDates_${username}`;
 const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -15,6 +15,7 @@ const MyPage = () => {
         name: "",
         email: "",
         username: "",
+        password: "",
         profileImgUrl: ""
     });
 
@@ -31,9 +32,13 @@ const MyPage = () => {
     }, []);
 
     const handleLogout = () => {
-        axios.post("/logout", {}, { withCredentials: true })
+        if (currentUser) {
+            const userKey = getUserKey(currentUser.username);
+            localStorage.removeItem(userKey); // 🔥 해당 사용자 기록만 삭제
+        }
+
+        axios.post("/logout")
             .then(() => {
-                localStorage.removeItem("currentUser");
                 navigate("/login");
             })
             .catch(() => alert("로그아웃 실패"));
@@ -47,7 +52,7 @@ const MyPage = () => {
         axios.delete("/api/user", { withCredentials: true })
             .then(() => {
                 alert("회원 탈퇴가 완료되었습니다.");
-                localStorage.removeItem("currentUser");
+                localStorage.clear();
                 navigate("/login");
             })
             .catch(err => {
@@ -58,7 +63,7 @@ const MyPage = () => {
 
     return (
         <div className="myPage-container">
-            <Header profileImgUrl={userData.profileImgUrl || defaultProfileImg} onLogout={handleLogout} />
+            <Header profileImgUrl={userData.profileImgUrl} onLogout={handleLogout} />
             <Logo />
 
             <main className="myPage-main">
@@ -107,3 +112,4 @@ const MyPage = () => {
 };
 
 export default MyPage;
+

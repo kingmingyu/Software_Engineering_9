@@ -12,11 +12,16 @@ const LearningTablePage = () => {
     const navigate = useNavigate();
 
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const getUserKey = (username) => `completedDates_${username}`;
 
     const handleLogout = () => {
+        if (currentUser) {
+            const userKey = getUserKey(currentUser.username);
+            localStorage.removeItem(userKey); // 🔥 해당 사용자 기록만 삭제
+        }
+
         axios.post("/logout")
             .then(() => {
-                localStorage.removeItem("currentUser"); // 사용자 정보 삭제
                 navigate("/login");
             })
             .catch(() => alert("로그아웃 실패"));

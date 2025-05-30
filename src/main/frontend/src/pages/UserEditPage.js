@@ -1,91 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import defaultProfileImg from "../assets/images/Generic avatar.png";
-import "./UserEditPage.css";
-import Header from "../component/Header";
-import Logo from "../component/Logo";
-
-const UserEditPage = () => {
-    const [userData, setUserData] = useState({
-        name: "",
-        email: "",
-        username: ""
-    });
-    const [profileImgUrl, setProfileImgUrl] = useState(defaultProfileImg);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        axios.get("/api/myPage", { withCredentials: true })
-            .then(res => {
-                setUserData(res.data);
-                setProfileImgUrl(res.data.profileImgUrl || defaultProfileImg);
-            })
-            .catch(err => {
-                alert("사용자 정보를 불러오는데 실패했습니다.");
-                console.error(err);
-            });
-    }, []);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setUserData(prev => ({ ...prev, [name]: value }));
-    };
-
-    const handleLogout = () => {
-        axios.post("/logout", {}, { withCredentials: true })
-            .then(() => {
-                localStorage.removeItem("currentUser");
-                navigate("/login");
-            })
-            .catch(() => alert("로그아웃 실패"));
-    };
-
-    const handleSave = () => {
-        axios.patch("/api/myPage/edit", userData, { withCredentials: true })
-            .then(res => {
-                if (res.data && typeof res.data === "string" && res.data.includes("로그아웃")) {
-                    alert("회원 정보 변경으로 인해 다시 로그인해주세요.");
-                    window.location.href = "/login";
-                } else {
-                    alert("수정 완료");
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                alert("수정 실패");
-            });
-    };
-
-    return (
-        <div className="user-edit-container">
-            <div className="header-container">
-                <Header profileImgUrl={profileImgUrl} onLogout={handleLogout} />
-            </div>
-            <div className="logo-container">
-                <Logo />
-            </div>
-            <main className="user-edit-main">
-                <div className="form-group">
-                    <label>이름</label>
-                    <input type="text" name="name" value={userData.name} onChange={handleChange} />
-                    <label>이메일</label>
-                    <input type="email" name="email" value={userData.email} onChange={handleChange} />
-                    <label>아이디</label>
-                    <input type="text" name="username" value={userData.username} onChange={handleChange} />
-                </div>
-                <button className="save-button" onClick={handleSave}>저장하기</button>
-            </main>
-        </div>
-    );
-};
-
-export default UserEditPage;
-
-
-/*
-import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";  // ← 추가
 import logo from "../assets/images/logo.png";
 import defaultProfileImg from "../assets/images/Generic avatar.png";
@@ -127,11 +41,15 @@ const UserEditPage = () => {
     };
 
     const handleLogout = () => {
+        if (currentUser) {
+            const userKey = getUserKey(currentUser.username);
+            localStorage.removeItem(userKey); // 🔥 해당 사용자 기록만 삭제
+        }
 
-        axios.post("/logout").then(() => {
-            setCurrentUser(null);
-            navigate("/login");
-        })
+        axios.post("/logout")
+            .then(() => {
+                navigate("/login");
+            })
             .catch(() => alert("로그아웃 실패"));
     };
 
@@ -175,4 +93,3 @@ const UserEditPage = () => {
 };
 
 export default UserEditPage;
- */
